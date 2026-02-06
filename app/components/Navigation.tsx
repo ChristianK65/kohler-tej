@@ -48,16 +48,16 @@ export default function Navigation() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/" className={linkStyles('/')}>
-              Home
+              Otthon
             </Link>
             <Link href="/products" className={linkStyles('/products')}>
-              Products
+              Termékek
             </Link>
             <Link href="/about" className={linkStyles('/about')}>
-              About Us
+              Rólunk
             </Link>
             <Link href="/contact" className={linkStyles('/contact')}>
-              Contact
+              Kapcsolat
             </Link>
           </div>
 
@@ -88,16 +88,16 @@ export default function Navigation() {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link href="/" className={mobileLinkStyles('/')} onClick={() => setMobileMenuOpen(false)}>
-              Home
+              Otthon
             </Link>
             <Link href="/products" className={mobileLinkStyles('/products')} onClick={() => setMobileMenuOpen(false)}>
-              Products
+              Termékek
             </Link>
             <Link href="/about" className={mobileLinkStyles('/about')} onClick={() => setMobileMenuOpen(false)}>
-              About Us
+              Rólunk
             </Link>
             <Link href="/contact" className={mobileLinkStyles('/contact')} onClick={() => setMobileMenuOpen(false)}>
-              Contact
+              Kapcsolat
             </Link>
           </div>
         </div>
