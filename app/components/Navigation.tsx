@@ -1,39 +1,70 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import clsx from "clsx";
 
 export default function Navigation() {
-  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
-  const isActive = (path: string) => {
-    return pathname === path;
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "-50% 0px -50% 0px",
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    const sections = document.querySelectorAll("section[id]");
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+    setMobileMenuOpen(false);
   };
 
-  const linkStyles = (path: string) => clsx(
-    "px-3 py-2 text-sm font-medium",
-    isActive(path) 
+  const isActive = (section: string) => {
+    return activeSection === section;
+  };
+
+  const linkStyles = (section: string) => clsx(
+    "px-3 py-2 text-sm font-medium cursor-pointer",
+    isActive(section) 
       ? "text-green-700 border-b-2 border-green-700" 
       : "text-gray-700 hover:text-green-700"
   );
 
-  const mobileLinkStyles = (path: string) => clsx(
-    "block px-3 py-2 text-base font-medium",
-    isActive(path)
+  const mobileLinkStyles = (section: string) => clsx(
+    "block px-3 py-2 text-base font-medium cursor-pointer",
+    isActive(section)
       ? "text-green-700 bg-green-50"
       : "text-gray-700 hover:text-green-700 hover:bg-gray-50"
   );
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex">
-            <Link href="/" className="flex-shrink-0 flex items-center space-x-3 py-2">
+            <button onClick={() => scrollToSection("home")} className="flex-shrink-0 flex items-center space-x-3 py-2">
               <Image 
                 src="/logo.jpg" 
                 alt="Köhler Tej Logo" 
@@ -42,23 +73,23 @@ export default function Navigation() {
                 className="rounded object-cover"
               />
               <span className="text-2xl font-bold text-black-700">Köhler Tej</span>
-            </Link>
+            </button>
           </div>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className={linkStyles('/')}>
+            <button onClick={() => scrollToSection("home")} className={linkStyles('home')}>
               Otthon
-            </Link>
-            <Link href="/products" className={linkStyles('/products')}>
+            </button>
+            <button onClick={() => scrollToSection("products")} className={linkStyles('products')}>
               Termékek
-            </Link>
-            <Link href="/about" className={linkStyles('/about')}>
+            </button>
+            <button onClick={() => scrollToSection("about")} className={linkStyles('about')}>
               Rólunk
-            </Link>
-            <Link href="/contact" className={linkStyles('/contact')}>
+            </button>
+            <button onClick={() => scrollToSection("contact")} className={linkStyles('contact')}>
               Kapcsolat
-            </Link>
+            </button>
           </div>
 
           {/* Mobile menu button */}
@@ -87,18 +118,18 @@ export default function Navigation() {
       {mobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link href="/" className={mobileLinkStyles('/')} onClick={() => setMobileMenuOpen(false)}>
+            <button onClick={() => scrollToSection("home")} className={mobileLinkStyles('home')}>
               Otthon
-            </Link>
-            <Link href="/products" className={mobileLinkStyles('/products')} onClick={() => setMobileMenuOpen(false)}>
+            </button>
+            <button onClick={() => scrollToSection("products")} className={mobileLinkStyles('products')}>
               Termékek
-            </Link>
-            <Link href="/about" className={mobileLinkStyles('/about')} onClick={() => setMobileMenuOpen(false)}>
+            </button>
+            <button onClick={() => scrollToSection("about")} className={mobileLinkStyles('about')}>
               Rólunk
-            </Link>
-            <Link href="/contact" className={mobileLinkStyles('/contact')} onClick={() => setMobileMenuOpen(false)}>
+            </button>
+            <button onClick={() => scrollToSection("contact")} className={mobileLinkStyles('contact')}>
               Kapcsolat
-            </Link>
+            </button>
           </div>
         </div>
       )}
