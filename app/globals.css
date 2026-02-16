@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #18181b;
+  --foreground: #f4f4f5;
 }
 
 html {
@@ -12,5 +12,84 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* --- Hero background & greeting animation --- */
+.hero {
+  background-image: url('/pictures/cheese/cheese-image-07.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--foreground);
+}
+
+/* Desktop-only fixed/parallax fallback: keeps mobile experience smooth */
+@media (min-width: 768px) {
+  .hero { background-attachment: fixed; }
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7,7,7,0.45) 0%, rgba(7,7,7,0.65) 100%);
+  z-index: 5; /* sits above slideshow layers but below content */
+  pointer-events: none;
+}
+
+/* --- Slideshow layers (hero background cycles through cheeses) --- */
+.hero-slides { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 900ms ease-in-out;
+  pointer-events: none;
+}
+
+/* 3s per slide, 7 slides total => 21s loop */
+.hero-slide:nth-child(1) { animation: slideFade 21s infinite; animation-delay: 0s; }
+.hero-slide:nth-child(2) { animation: slideFade 21s infinite; animation-delay: 3s; }
+.hero-slide:nth-child(3) { animation: slideFade 21s infinite; animation-delay: 6s; }
+.hero-slide:nth-child(4) { animation: slideFade 21s infinite; animation-delay: 9s; }
+.hero-slide:nth-child(5) { animation: slideFade 21s infinite; animation-delay: 12s; }
+.hero-slide:nth-child(6) { animation: slideFade 21s infinite; animation-delay: 15s; }
+.hero-slide:nth-child(7) { animation: slideFade 21s infinite; animation-delay: 18s; }
+
+@keyframes slideFade {
+  0% { opacity: 0; }
+  6% { opacity: 1; }
+  28% { opacity: 1; }
+  34% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide { animation: none !important; opacity: 0; }
+  .hero-slide:first-child { opacity: 1; }
+}
+
+.hero-content { position: relative; z-index: 10; text-align: center; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* slowed entrance for greeting */
+.animate-fade-up { animation: fadeUp 1200ms cubic-bezier(.22,.98,.36,1) both; }
+.animate-fade-up-delay { animation: fadeUp 1500ms cubic-bezier(.22,.98,.36,1) both; animation-delay: 300ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up, .animate-fade-up-delay { animation: none; opacity: 1; transform: none; }
 }
