@@ -8,6 +8,7 @@ Köhler Tej is a static website for my uncles in Hungary, showcasing their milk 
 
 | Layer | Technology |
 |---|---|
+| Hardware | Intel NUC |
 | Hosting | Proxmox · Docker · Caddy reverse proxy (alongside [samolni.com](https://samolni.com)) |
 | Framework | Next.js 16 (static export) |
 | Language | TypeScript 5 |
